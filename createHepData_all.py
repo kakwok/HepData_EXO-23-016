@@ -1474,6 +1474,99 @@ def makeScoutingMuonResolutionTable():
     return table
 
 
+def makeMETIsoTrkHLTPathEffTable(tableName,fileName,isSignal,xAxisLabel,xAxisUnits):
+    table = Table(tableName)
+    if isSignal: table.description = "L1T+HLT efficiency of the MET+IsoTrk trigger as a function of the number of tracker layers with valid measurements of the track that pass the offline requirements, in $\\tilde{\\chi}_{1}^{\\pm} \\rightarrow \\tilde{\\chi}_{1}^{0}$+X simulated events for 2022 conditions, where $m_{\\tilde{\\chi}_{1}^{\\pm}}=900$ GeV and $\\tilde{\\chi}_{1}^{0}$ is nearly mass-degenerate with $\\tilde{\\chi}_{1}^{\\pm}$. The efficiency is shown for LLPs with $c\\tau=$ 10, 100, and 1000 cm in black, blue, and red, respectively."
+    else: table.description = "Comparison of L1T+HLT efficiencies of the MET+IsoTrk trigger calculated with 2022 data (black), 2023 data (blue), and $W \\rightarrow l \\nu$ simulation (red), as a function of offline reconstructed PF $p_{T}^{miss, \\mu \\hspace{-0.15cm} /}$ (right). The data follow the typical rise in efficiency, but the efficiency does not reach 100% because of the isolated track leg of the algorithm."
+
+    image = "data_Breno/" + fileName + ".pdf"
+    reader = RootFileReader("data_Breno/" + fileName + ".root")
+    complement = ''
+    if isSignal: complement = 'left'
+    else: complement = 'right'
+    table.location = "Data from Fig. 10 " + complement
+    table.add_image(image)
+
+    plot_1 = ""
+    plot_2 = ""
+    plot_3 = ""
+
+    if isSignal:
+        plot_1 = reader.read_hist_1d("overallEff_HLT_MET105_IsoTrk50_10cm")
+        plot_2 = reader.read_hist_1d("overallEff_HLT_MET105_IsoTrk50_100cm")
+        plot_3 = reader.read_hist_1d("overallEff_HLT_MET105_IsoTrk50_1000cm")
+    else:
+        plot_1 = reader.read_graph("HLT_MET105_IsoTrk50_2022Data")
+        plot_2 = reader.read_graph("HLT_MET105_IsoTrk50_2023Data")
+        plot_3 = reader.read_graph("HLT_MET105_IsoTrk50_MC")
+
+    xAxisVar = Variable(xAxisLabel, is_independent=True, is_binned=False, units=xAxisUnits)
+    if isSignal: xAxisVar.values = plot_1["x_labels"]
+    else: xAxisVar.values = plot_1["x"]
+
+    table.add_variable(xAxisVar)
+
+    label_1 = ""
+    label_2 = ""
+    label_3 = ""
+
+    if isSignal:
+        label_1 = "$m_{\\tilde{\chi}_{1}^{\pm}} = 900$ GeV, $c \\tau = 10$ cm"
+        label_2 = "$m_{\\tilde{\chi}_{1}^{\pm}} = 900$ GeV, $c \\tau = 100$ cm"
+        label_3 = "$m_{\\tilde{\chi}_{1}^{\pm}} = 900$ GeV, $c \\tau = 1000$ cm"
+    else:
+        label_1 = "2022 data"
+        label_2 = "2023 data"
+        label_3 = "$W \\rightarrow l \\nu$"
+
+    if isSignal:
+        table.add_variable(makeVariable(plot=plot_1, label=label_1, is_independent=False, is_binned=False, is_symmetric=True, units=""))
+        table.add_variable(makeVariable(plot=plot_2, label=label_2, is_independent=False, is_binned=False, is_symmetric=True, units=""))
+        table.add_variable(makeVariable(plot=plot_3, label=label_3, is_independent=False, is_binned=False, is_symmetric=True, units=""))
+    else:
+        table.add_variable(makeVariable(plot=plot_1, label=label_1, is_independent=False, is_binned=False, is_symmetric=False, units=""))
+        table.add_variable(makeVariable(plot=plot_2, label=label_2, is_independent=False, is_binned=False, is_symmetric=False, units=""))
+        table.add_variable(makeVariable(plot=plot_3, label=label_3, is_independent=False, is_binned=False, is_symmetric=False, units=""))
+
+    return table
+
+def makeMETAndIsoTrkHLTPathEffTable(tableName,fileName,isMET,xAxisLabel):
+    table = Table(tableName)
+
+    if isMET: table.description = "Efficiency of the L1T+HLT $p_{T}^{miss}$ leg as a function of offline reconstructed PF $p_{T}^{miss, \\mu \\hspace{-0.15cm} /}$ in 2022 data (black), 2023 data (blue), and $W \\rightarrow l \\nu$ simulation (red)."
+    else: table.description = "Efficiency of the full HLT path, taking into account only events that already passed through the $p_{T}^{miss}$ leg, as a function of the selected muon $p_{T}$ in 2022 data (black), 2023 data (blue), and $W \\rightarrow l \\nu$ simulation (red)."
+
+    image = "data_Breno/" + fileName + ".pdf"
+    reader = RootFileReader("data_Breno/" + fileName + ".root")
+    complement = ''
+    if isMET: complement = 'left'
+    else: complement = 'right'
+    table.location = "Data from Fig. 11 " + complement
+    table.add_image(image)
+
+    plot_1 = ""
+    plot_2 = ""
+    plot_3 = ""
+
+    if isMET:
+        plot_1 = reader.read_graph("filterMET105_2022Data")
+        plot_2 = reader.read_graph("filterMET105_2023Data")
+        plot_3 = reader.read_graph("filterMET105_MC")
+    else:
+        plot_1 = reader.read_graph("filterIsoTrk50_2022Data")
+        plot_2 = reader.read_graph("filterIsoTrk50_2023Data")
+        plot_3 = reader.read_graph("filterIsoTrk50_MC")
+
+    xAxisVar = Variable(xAxisLabel, is_independent=True, is_binned=False, units="GeV")
+    xAxisVar.values = plot_1["x"]
+    table.add_variable(xAxisVar)
+
+    table.add_variable(makeVariable(plot=plot_1, label="2022 data", is_independent=False, is_binned=False, is_symmetric=False, units=""))
+    table.add_variable(makeVariable(plot=plot_2, label="2023 data", is_independent=False, is_binned=False, is_symmetric=False, units=""))
+    table.add_variable(makeVariable(plot=plot_3, label="$W \\rightarrow l\\nu$", is_independent=False, is_binned=False, is_symmetric=False, units=""))
+
+    return table
+
 def main():
     # Check if ImageMagick is available for image processing
     has_imagemagick = check_imagemagick_available()
@@ -1503,6 +1596,14 @@ def main():
     # Figure 2
     submission.add_table(makeTrackingEfficiencyTable("Offline"))
     submission.add_table(makeTrackingEfficiencyTable("HLT"))
+
+    # Figure 10
+    submission.add_table(makeMETIsoTrkHLTPathEffTable("MET+IsoTrk efficiency vs Tracker layers with measurement","900_10vs100vs1000_HLT_MET105_IsoTrk50",True,"Number of tracker layers with measurement",""))
+    submission.add_table(makeMETIsoTrkHLTPathEffTable("MET+IsoTrk efficiency vs PF missing transverse momentum","moreLogNoExponent_2022vs2023vMC_HLT_MET105_IsoTrk50_v",False,"PF $p_{T}^{miss, \\mu \\hspace{-0.15cm} /}$","GeV"))
+
+    # Figure 11
+    submission.add_table(makeMETAndIsoTrkHLTPathEffTable("MET filter efficiency vs PF missing transverse momentum","moreLogNoExponent_2022vs2023vMC_filterMET105",True,"PF $p_{T}^{miss, \\mu \\hspace{-0.15cm} /}$"))
+    submission.add_table(makeMETAndIsoTrkHLTPathEffTable("IsoTrk filter efficiency vs PF missing transverse momentum","moreLogNoExponent_2022vs2023vMC_filterIsoTrk50",False,"Muon $p_{T}$"))
 
     # Figure 13
     submission.add_table(makeDisplacedTauEffTable('MET'))
