@@ -219,6 +219,61 @@ def makeHcalL1DecayREffTable():
 
     return table
 
+def makeCalRatioJetEffTable():
+    table = Table("HLT efficiency of CalRatio trigger vs. leading jet neutral hadron energy fraction")
+    table.description = "The HLT efficiency of the CalRatio trigger as a function of the leading PF jet NHEF in 2024 data, measured with respect to a logical " \
+        "OR of the HCAL-based LLP L1 jet triggers (\cmsLeft). Distribution of the leading PF jet NHEF (\cmsRight) in 2024 data (black circles), \WtoLNu " \
+        "background simulation for 2024 conditions (red squares), and $\PH \to \PS\PS \to \bbbar\bbbar$ signal simulation for 2023 conditions (blue and purple " \
+        "triangles). Events are required to have $\HT > 200\GeV$ and the leading jet is required to have $\pt > 60\GeV$ and $\abs{\eta} < 1.5$, which are " \
+        "equivalent to the respective HLT jet object selections. The signal distributions additionally require the leading jet to be matched to an LLP decaying " \
+        "anywhere inside the barrel calorimeter volume ($129 < R < 295\cm$). The clear separation between the displaced signal and the prompt background " \
+        "in the \cmsRight plot motivates the development of the CalRatio trigger."
+    image = "data_Kiley/calratio_efficiency.pdf"
+    table.add_image(image)
+    table.location = "Data from Fig. 25"
+
+    # Tefficiencies from the ROOT file
+    reader = RootFileReader("data_Kiley/calratio_efficiency.root")
+    plot_efficiency = reader.read_teff("data2024;1")
+
+    xAxisVar = Variable("Leading jet neutral hadron energy fraction", is_independent=True, is_binned=False, units="")
+    xAxisVar.values = plot_efficiency["x"]
+    table.add_variable(xAxisVar)
+
+    table.add_variable(makeVariable(plot=plot_efficiency, label="Data", is_independent=False, is_binned=False, is_symmetric=False, units=""))
+
+    return table
+
+def makeCalRatioJetDistributionTable():
+    table = Table("Distribution of leading jet neutral hadron energy fraction in data, background W+Jets MC, and displaced signal")
+    table.description = "The HLT efficiency of the CalRatio trigger as a function of the leading PF jet NHEF in 2024 data, measured with respect to a logical " \
+        "OR of the HCAL-based LLP L1 jet triggers (\cmsLeft). Distribution of the leading PF jet NHEF (\cmsRight) in 2024 data (black circles), \WtoLNu " \
+        "background simulation for 2024 conditions (red squares), and $\PH \to \PS\PS \to \bbbar\bbbar$ signal simulation for 2023 conditions (blue and purple " \
+        "triangles). Events are required to have $\HT > 200\GeV$ and the leading jet is required to have $\pt > 60\GeV$ and $\abs{\eta} < 1.5$, which are " \
+        "equivalent to the respective HLT jet object selections. The signal distributions additionally require the leading jet to be matched to an LLP decaying " \
+        "anywhere inside the barrel calorimeter volume ($129 < R < 295\cm$). The clear separation between the displaced signal and the prompt background " \
+        "in the \cmsRight plot motivates the development of the CalRatio trigger."
+    image = "data_Kiley/calratio_distribution.pdf"
+    table.add_image(image)
+
+    # THists from the ROOT file
+    reader = RootFileReader("data_Kiley/calratio_distribution.root")
+    data   = reader.read_hist_1d("data2024;1")
+    bkg    = reader.read_hist_1d("background_wplusjets;1")
+    sig350 = reader.read_hist_1d("signal_HToSSTo4b_350_80_0p5m;1")
+    sig125 = reader.read_hist_1d("signal_HToSSTo4b_125_50_3m;1")
+
+    xAxisVar = Variable("Leading jet neutral hadron energy fraction", is_independent=True, is_binned=True, units="")
+    xAxisVar.values = data["x_edges"]
+    table.add_variable(xAxisVar)
+
+    table.add_variable(makeVariable(plot=data, label="Data", is_independent=False, is_binned=False, is_symmetric=True, units=""))
+    table.add_variable(makeVariable(plot=bkg, label="W #rightarrow l#nu+jets", is_independent=False, is_binned=False, is_symmetric=True, units=""))
+    table.add_variable(makeVariable(plot=sig350, label="H #rightarrow SS #rightarrow 4b (350 GeV, 80 GeV, 0.5 m)", is_independent=False, is_binned=False, is_symmetric=True, units=""))
+    table.add_variable(makeVariable(plot=sig125, label="H #rightarrow SS #rightarrow 4b (125 GeV, 50 GeV, 3 m)", is_independent=False, is_binned=False, is_symmetric=True, units=""))
+
+    return table
+
 def makeDisplacedMuonL1EffTable(xvar):
     table_title = xvar
     table = Table("L1T efficiency vs displaced muon $\mathrm{d_{0}}$ in "+table_title)
