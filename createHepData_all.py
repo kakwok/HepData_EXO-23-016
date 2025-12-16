@@ -71,6 +71,140 @@ def check_imagemagick_available():
     except (subprocess.TimeoutExpired, FileNotFoundError, subprocess.SubprocessError):
         return False
 
+def makeHT430EffTable():
+    table = Table("Displaced jet HLT $H_{T}$ > 430 GeV efficiency")
+    table.description = "the HLT efficiency for a given event passing the main displaced-jet trigger to satisfy HLT calorimeter $H_{\mathrm{T}}>430~\mathrm{GeV}$  as a function of the offline calorimeter $H_{\mathrm{T}}$. The measurements are performed in data collected in 2022 (green circles), in 2023 before an update of the HCAL gain values and energy response corrections (black squares), and in 2023 after the update (blue triangles)."
+    image = "data_Jingyu/DisplacedJets_HT_performance_years.pdf"
+    reader = RootFileReader("data_Jingyu/DisplacedJets_HT_performance_years.root")
+    HT430_22 = "eff22_HT430"
+    HT430_23 = "eff23_HT430"
+    HT430_23late = "eff23late_HT430"
+    table.location = "Data from Fig. 16 (left)"
+    table.add_image(image)
+    
+    plot_HT430_22 = reader.read_teff(HT430_22)
+    plot_HT430_23 = reader.read_teff(HT430_23)
+    plot_HT430_23late = reader.read_teff(HT430_23late)
+    
+    xAxisVar = Variable("$H_{\mathrm{T}}$", is_independent=True, is_binned=False, units="$\mathrm{GeV}$")
+    xAxisVar.values =plot_HT430_22["x"]
+    table.add_variable(xAxisVar)
+    table.add_variable(makeVariable(plot=plot_HT430_22, label="Data 2022", is_independent=False, is_binned=False, is_symmetric=False, units=""))
+    table.add_variable(makeVariable(plot=plot_HT430_23, label="Data 2023 before HCAL conditions update", is_independent=False, is_binned=False, is_symmetric=False, units=""))
+    table.add_variable(makeVariable(plot=plot_HT430_23late, label="Data 2023 after HCAL conditions update", is_independent=False, is_binned=False, is_symmetric=False, units=""))
+    
+    return table
+
+
+def makeHT390EffTable():
+    table = Table("Displaced jet HLT $H_{T}$ > 390 GeV efficiency")
+    table.description = "the HLT efficiency for a given event passing the main displaced-jet trigger to satisfy HLT calorimeter $H_{\mathrm{T}}>390~\mathrm{GeV}$  as a function of the offline calorimeter $H_{\mathrm{T}}$. The measurements are performed in data collected in 2022 (green circles), in 2023 before an update of the HCAL gain values and energy response corrections (black squares), and in 2023 after the update (blue triangles)."
+    image = "data_Jingyu/DisplacedJets_HT_performance_years_HT390.pdf"
+    reader = RootFileReader("data_Jingyu/DisplacedJets_HT_performance_years_HT390.root")
+    HT390_23 = "eff23_HT390"
+    HT390_23late = "eff23late_HT390"
+    table.location = "Data from Fig. 16 (right)"
+    table.add_image(image)
+    
+    plot_HT390_23 = reader.read_teff(HT390_23)
+    plot_HT390_23late = reader.read_teff(HT390_23late)
+    
+    xAxisVar = Variable("$H_{\mathrm{T}}$", is_independent=True, is_binned=False, units="$\mathrm{GeV}$")
+    xAxisVar.values =plot_HT390_23["x"]
+    table.add_variable(xAxisVar)
+    table.add_variable(makeVariable(plot=plot_HT390_23, label="Data 2023 before HCAL conditions update", is_independent=False, is_binned=False, is_symmetric=False, units=""))
+    table.add_variable(makeVariable(plot=plot_HT390_23late, label="Data 2023 after HCAL conditions update", is_independent=False, is_binned=False, is_symmetric=False, units=""))
+    
+    return table
+
+def makePt40EffTable():
+    table = Table("Displaced jet HLT $p_{T}$ > 40 GeV efficiency")
+    table.description = "Efficiency of an offline calorimeter jet to pass the online $p_{\mathrm{T}}$ requirement in displaced-jet triggers, which require $p_{\mathrm{T}}>40\mathrm{GeV}$, in data collected in 2022 (green squares), in 2023 before an update of the HCAL gains and energy response corrections (black filled circles), and in 2023 after the update (blue open circles). The efficiencies measured with QCD multijet simulation are also shown, for 2022 (red triangles) and 2023 (purple triangles) conditions."
+    image = "data_Jingyu/DisplacedJets_Run3_jetpt40_Eff_years.pdf"
+    reader =RootFileReader("data_Jingyu/DisplacedJets_Run3_jetpt40_Eff_years.root")
+    PT40_QCD22 = "eff_Pt40_QCD22"
+    PT40_QCD23 = "eff_Pt40_QCD23"
+    PT40_data22 = "eff_Pt40_data22"
+    PT40_data23 = "eff_Pt40_data23"
+    PT40_data23late = "eff_Pt40_data23late"
+    table.location = "Data from Fig. 17 (left)"
+    table.add_image(image)
+    
+    plot_PT40_QCD22 = reader.read_teff(PT40_QCD22)
+    plot_PT40_QCD23 = reader.read_teff(PT40_QCD23)
+    plot_PT40_data22 = reader.read_teff(PT40_data22)
+    plot_PT40_data23 = reader.read_teff(PT40_data23)
+    plot_PT40_data23late = reader.read_teff(PT40_data23late)
+    xAxisVar = Variable("$p_{\mathrm{T}}$", is_independent=True, is_binned=False, units = "$\mathrm{GeV}$")
+    xAxisVar.values = plot_PT40_QCD22["x"]
+    table.add_variable(xAxisVar)
+    table.add_variable(makeVariable(plot=plot_PT40_QCD22, label="QCD multijet (2022)", is_independent=False, is_binned=False, is_symmetric=False, units=""))
+    table.add_variable(makeVariable(plot=plot_PT40_QCD23, label="QCD multijet (2023)", is_independent=False, is_binned=False, is_symmetric=False, units=""))
+    table.add_variable(makeVariable(plot=plot_PT40_data22, label="Data 2022", is_independent=False, is_binned=False, is_symmetric=False, units=""))
+    table.add_variable(makeVariable(plot=plot_PT40_data23, label="Data 2023 before HCAL conditions update", is_independent=False, is_binned=False, is_symmetric=False, units=""))
+    table.add_variable(makeVariable(plot=plot_PT40_data23late, label="Data 2023 after HCAL conditions update", is_independent=False, is_binned=False, is_symmetric=False, units=""))
+    
+    return table
+    
+def makePtrkEffTable():
+    table = Table("Displaced jet HLT tracking requirement efficiency" )
+    table.description = "Efficiency of an offline calorimeter jet to have at most one HLT prompt track for 2022 conditions, as a function of the number of offline prompt tracks, in simulated $\mathrm{H}\to\mathrm{SS}$, $\mathrm{S}\to\mathrm{b\overline{b}}$ signal events where $m_{\mathrm{H}} = 125~\mathrm{GeV}$ and $m_{\mathrm{S}}=40~\mathrm{GeV}$. Two proper decay lengths of the $\mathrm{S}$ particle are shown: $c\\tau=10~\mathrm{mm}$ (green circles) and $c\\tau = 100~\mathrm{mm}$ (blue squares)."
+    image = "data_Jingyu/DisplacedJet_Trigger_Run3_signal_prompttrack_veto_eff.pdf"
+    reader = RootFileReader("data_Jingyu/DisplacedJet_Trigger_Run3_signal_prompttrack_veto_eff.root")
+    table.loaction = "Data from Fig. 17 (right)"
+    table.add_image(image)
+    plot10mm = reader.read_teff("eff_10mm")
+    plot100mm = reader.read_teff("eff_100mm")
+    
+    xAxisVar = Variable("Number of offline prompt tracks",is_independent=True, is_binned=False, units="")
+    xAxisVar.values = plot10mm["x"]
+    table.add_variable(xAxisVar)
+    table.add_variable(makeVariable(plot=plot10mm, label="$c\\tau_{0} = 10~\mathrm{mm}$", is_independent=False, is_binned=False, is_symmetric=False, units=""))
+    table.add_variable(makeVariable(plot=plot100mm, label="$c\\tau_{0} = 100~\mathrm{mm}$", is_independent=False, is_binned=False, is_symmetric=False, units=""))
+    
+    return table
+    
+
+    
+def makeGenEffTable():
+    table = Table("Displaced jet HLT tagging efficiency")
+    table.description = "The per-parton (quark or lepton) HLT displaced-jet tagging efficiency as a function of the generator-level $L_{xy}$ of the parton is shown for displaced b quarks (blue circles), d quarks (purple triangels), and $\\tau$ leptons (green squares) with $p_{\mathrm{T}}>40~\mathrm{GeV}$ and $|\eta|<2.0$."
+    image = "data_Jingyu/DisplacedJets_GenEff_cm.pdf"
+    reader = RootFileReader("data_Jingyu/DisplacedJets_GenEff_cm.root")
+    table.loaction = "Data from Fig. 18"
+    table.add_image(image)
+    plotbb = reader.read_teff("eff_dxy_bb")
+    plotdd = reader.read_teff("eff_dxy_dd")
+    plottau = reader.read_teff("eff_dxy_tau")
+    
+    xAxisVar = Variable("Gen.-level parton production vertex $L_{xy}$", is_independent=True, is_binned=False, units="cm")
+    xAxisVar.values = plotbb["x"]
+    table.add_variable(xAxisVar)
+    table.add_variable(makeVariable(plot=plotbb, label="b quark", is_independent=False, is_binned=False, is_symmetric=False, units=""))
+    table.add_variable(makeVariable(plot=plotdd, label="d quark", is_independent=False, is_binned=False, is_symmetric=False, units=""))
+    table.add_variable(makeVariable(plot=plottau, label="$\\tau$ lepton", is_independent=False, is_binned=False, is_symmetric=False, units=""))
+    
+    return table
+    
+def makeGainTable():
+    table = Table("Displaced jet trigger efficiency Run 3 v.s. Run 2 ratio")
+    table.description = "The ratio between the Run 3 displaced-jet trigger efficiency and the Run 2 displaced jet trigger efficiency as a function of LLP $c\\tau$, in simulated $\mathrm{H}\to\mathrm{SS}$, $\mathrm{S}\to\mathrm{b\overline{b}}$ signal events where $m_{\mathrm{H}}=125~\mathrm{GeV}$ and $m_{\mathrm{S}}=15$ (blue triangles), 40 (green squares), or 55 (red circles)$\mathrm{GeV}$. The Run 3 displaced trigger efficiencies are measured for 2022 conditions."
+    image = "data_Jingyu/DisplacedJet_Trigger_Run3vsRun2_efficiency_gain.pdf"
+    reader = RootFileReader("data_Jingyu/DisplacedJet_Trigger_Run3vsRun2_efficiency_gain.root")
+    table.location = "Data from Fig. 19"
+    table.add_image(image)
+    plotM55 = reader.read_graph("gra_gain_M55")
+    plotM40 = reader.read_graph("gra_gain_M40")
+    plotM15 = reader.read_graph("gra_gain_M15")
+    
+    xAxisVar = Variable("$c\\tau$", is_independent=True, is_binned=False, units="cm")
+    xAxisVar.values = plotM55["x"]
+    table.add_variable(xAxisVar)
+    table.add_variable(makeVariable(plot=plotM55, label="$m_{\mathrm{S}}=55~\mathrm{GeV}$", is_independent=False, is_binned=False, is_symmetric=False, units="", uncertainty=False))
+    table.add_variable(makeVariable(plot=plotM40, label="$m_{\mathrm{S}}=40~\mathrm{GeV}$", is_independent=False, is_binned=False, is_symmetric=False, units="", uncertainty=False))
+    table.add_variable(makeVariable(plot=plotM15, label="$m_{\mathrm{S}}=15~\mathrm{GeV}$", is_independent=False, is_binned=False, is_symmetric=False, units="", uncertainty=False))
+    return table
+
 def makeHcalTowerEffTable():
     table = Table("L1T HCAL delayed tower efficiency vs Timing shift [ns]")
     table.description = "The L1T HCAL trigger tower efficiency of the delayed timing towers in 2023 HCAL timing-scan data, with efficiencies split by trigger "\
@@ -1685,6 +1819,20 @@ def main():
     # Figure 14
     submission.add_table(makeDiTauRateTable('2022'))
     submission.add_table(makeDiTauRateTable('2023'))
+
+    # Figure 16
+    submission.add_table(makeHT430EffTable())
+    submission.add_table(makeHT390EffTable())
+    
+    #Figure 17
+    submission.add_table(makePt40EffTable())
+    submission.add_table(makePtrkEffTable())
+    
+    #Figure 18
+    submission.add_table(makeGenEffTable())
+    
+    #Figure 19
+    submission.add_table(makeGainTable())
 
     # Figure 21
     submission.add_table(makeHcalTowerEffTable())
