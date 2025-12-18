@@ -223,7 +223,7 @@ def make_hepdata_table_from_arrays(
 def makeFig56leftTable(histograms):
     arrays = compute_ratio_arrays(histograms['fig56_l'], "numer_hlt", "denom_hlt")
     table = make_hepdata_table_from_arrays(arrays,
-                                           table_name ="HLT efficiency of DT MDS vs ptmiss",
+                                           table_name ="56.a. HLT efficiency of DT MDS vs ptmiss",
                                            table_description = "The HLT efficiency of the DT MDS triggers as a function of $p_T^{miss}$, for simulated $H \\to S S \\to b\\bar{{b}}\\,b\\bar{{b}}$ events with $m_{H}=125$ GeV, $m_{S}=40$ GeV, and $c\\tau_{S}=1$ m, for 2023 conditions. Events are required to have at least one cluster with more than 50 hits.",
                                            table_location = "Data from Fig. 56 left",
                                            table_image = "data_Martin/MDS_DT_eff_v_MET.pdf",
@@ -236,7 +236,7 @@ def makeFig56leftTable(histograms):
 def makeFig56rightTable(histograms):    
     arrays = compute_ratio_arrays(histograms['fig56_r'], "numer_hlt", "denom_hlt")
     table = make_hepdata_table_from_arrays(arrays,
-                                           table_name ="HLT efficiency of DT MDS vs cluser size",
+                                           table_name ="56.b. HLT efficiency of DT MDS vs cluser size",
                                            table_description = "The HLT efficiency of the DT MDS triggers as a function of cluster size, for simulated $H \\to S S \\to b\\bar{{b}}\\,b\\bar{{b}}$ events with $m_{H}=125$ GeV, $m_{S}=40$ GeV, and $c\\tau_{S}=1$ m, for 2023 conditions. Events are required to have $p_T^{miss}>250$ GeV.",
                                            table_location = "Data from Fig. 56 right",
                                            table_image = "data_Martin/MDS_DT_eff_v_cls.pdf",          
@@ -251,7 +251,7 @@ def makeFig56rightTable(histograms):
 
 def makeFig60table(histograms):
     results = histograms['results']
-    table = Table("MDS Run 2, Run 3 acceptance comparison")
+    table = Table("63. MDS Run 2, Run 3 acceptance comparison")
     table.description = "Comparison of the acceptances in Run 2 and Run 3 for the CSC (left) and DT (right) MDS triggers at the L1T and HLT as functions of the LLP lifetime, for $H \\to S S \\to b\\bar{{b}}\\,b\\bar{{b}}$ events with $m_{H}=125$ GeV and $m_{S}=40$ GeV, for 2023 conditions. The acceptance is defined as the fraction of events that pass the specified selection, given an LLP decay in the fiducial region of the CSCs (left) or DTs (right). The left plot compares the acceptance of the Run 2 strategy of triggering on $p_T^{miss}$ (blue circles), which corresponds to an offline requirement of $>200$ GeV, with that of the Run 3 strategy of triggering on the MDS signature in the CSCs, for both the L1T (L1T+HLT) acceptance is shown with orange squares (red triangles). The right plot compares the acceptance of the Run 2 strategy of triggering on $p_T^{miss}$ (blue circles) with the Run 3 strategy of triggering on the MDS signature in the DTs (red triangles), for L1T+HLT."
     table.location = "Data from Fig. 63"
     table.add_image("data_Martin/MDS_CSC_acc_v_ctau_mH-125_mS-40.pdf")
@@ -290,7 +290,7 @@ def makeFig60table(histograms):
 def makeFig61table(histograms):
     arrays = compute_ratio_arrays(histograms['fig61'], "numer_l1", "denom")
     table = make_hepdata_table_from_arrays(arrays,
-                                           table_name ="L1T and L1T+HLT acceptance for CSC MDS",
+                                           table_name ="64. L1T and L1T+HLT acceptance for CSC MDS",
                                            table_description = "The L1T (blue circles) and L1T+HLT (orange squares) acceptances for the CSC MDS trigger as functions of the LLP decay positions in the $z$-direction, for $H \\to S S \\to b\\bar{{b}}\\,b\\bar{{b}}$ events with $m_{H}=350$ GeV, $m_{S}=80$ GeV, and $c\\tau_{S}=1$ m, for 2023 conditions.",
                                            table_location = "Data from Fig. 64",
                                            table_image = "data_Martin/MDS_CSC_acc_v_Z.pdf",
@@ -320,7 +320,7 @@ def makeFig61table(histograms):
 def makeFig62table(histograms):
     arrays = compute_ratio_arrays(histograms['fig62'], "numer_dt_L1MET_tight", "denom_dt_L1MET")
     table = make_hepdata_table_from_arrays(arrays,
-                                           table_name ="HLT and L1T+HLT aceptance for DT MDS",
+                                           table_name ="65. HLT and L1T+HLT aceptance for DT MDS",
                                            table_description = "The HLT (blue circles) and L1T+HLT (orange squares) acceptances for the DT MDS trigger as functions of the LLP decay positions in the radial direction, for $H \\to S S \\to b\\bar{{b}}\\,b\\bar{{b}}$ events with $m_{H}=350$ GeV, $m_{S}=80$ GeV, and $c\\tau_{S}=1$ m, for 2023 conditions.",
                                            table_location = "Data from Fig. 65",
                                            table_image = "data_Martin/MDS_DT_acc_v_r.pdf",
@@ -350,7 +350,7 @@ def makeFig62table(histograms):
 def makeFig63leftTable(histograms):
     arrays = compute_ratio_arrays(histograms['fig63'], "numer_l1", "denom")
     table = make_hepdata_table_from_arrays(arrays,
-                                           table_name ="2D L1T acceptance for CSC MDS",
+                                           table_name ="66.a. 2D L1T acceptance for CSC MDS",
                                            table_description = "The L1T acceptance for the CSC MDS trigger as functions of the LLP decay position, for $H \\to S S \\to b\\bar{{b}}\\,b\\bar{{b}}$ events with $m_{H}=350$ GeV, $m_{S}=80$ GeV, and $c\\tau_{S}=1$ m, for 2023 conditions.",
                                            table_location = "Data from Fig. 66 left",
                                            table_image = "data_Martin/MDS_CSC_2D_L1acc_v_rZ.pdf",
@@ -363,7 +363,7 @@ def makeFig63leftTable(histograms):
 def makeFig63rightTable(histograms):    
     arrays_hlt = compute_ratio_arrays(histograms['fig63'], "numer", "denom")
     table = make_hepdata_table_from_arrays(arrays_hlt,
-                                           table_name ="2D L1T+HLT acceptance for CSC MDS",
+                                           table_name ="66.b. 2D L1T+HLT acceptance for CSC MDS",
                                            table_description = "The L1T+HLT acceptance for the CSC MDS trigger as functions of the LLP decay position, for $H \\to S S \\to b\\bar{{b}}\\,b\\bar{{b}}$ events with $m_{H}=350$ GeV, $m_{S}=80$ GeV, and $c\\tau_{S}=1$ m, for 2023 conditions.",
                                            table_location = "Data from Fig. 66 right",
                                            table_image = "data_Martin/MDS_CSC_2D_HLTacc_v_rZ.pdf",
@@ -382,7 +382,7 @@ def makeFig63rightTable(histograms):
 def makeFig64table(histograms):
     arrays = compute_ratio_arrays(histograms['fig64'], "numer_dt_L1MET", "denom_dt_L1MET")
     table = make_hepdata_table_from_arrays(arrays,
-                                           table_name ="2D HLT acceptance for DT MDS",
+                                           table_name ="67. 2D HLT acceptance for DT MDS",
                                            table_description = "The HLT acceptance for the DT MDS trigger as a function of the LLP decay position, for $H \\to S S \\to b\\bar{{b}}\\,b\\bar{{b}}$ events with $m_{H}=350$ GeV, $m_{S}=80$ GeV, and $c\\tau_{S}=1$ m, for 2023 conditions. The L1T acceptance that is based on the $p_T^{miss}$ trigger is not included.",
                                            table_location = "Data from Fig. 67",
                                            table_image = "data_Martin/MDS_DT_2D_HLTacc_v_rZ.pdf",
