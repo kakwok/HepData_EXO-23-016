@@ -173,8 +173,7 @@ def make_hepdata_table_from_arrays(
             down = float(ratio_uncert[(0,) + idx])
             up = float(ratio_uncert[(1,) + idx])
         # append as a 2-tuple: (value, (minus, plus))
-        dep_values.append((val_item, (down, up)))
-
+        dep_values.append((val_item, (-down, up)))
 
     # Build table and Variables
     table = Table(table_name)
